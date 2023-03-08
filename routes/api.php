@@ -49,3 +49,5 @@ Route::middleware(['auth:sanctum' , 'permission'])->group(function () {
     Route::apiResource('roles' , RoleController::class);
     Route::apiResource('plans' , PlansController::class);
 });
+
+

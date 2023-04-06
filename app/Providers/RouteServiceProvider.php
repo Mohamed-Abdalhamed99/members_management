@@ -44,6 +44,7 @@ class RouteServiceProvider extends ServiceProvider
 
     protected function mapWebRoutes()
     {
+
         foreach ($this->centralDomains() as $domain) {
             Route::middleware('web')
                 ->domain($domain)
@@ -55,7 +56,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes()
     {
         foreach ($this->centralDomains() as $domain) {
-            Route::prefix('v1/api/dashboard')
+            Route::prefix('v1/api')
                 ->domain($domain)
                 ->middleware(['api' , 'check_language' , 'json.response'])
                 ->namespace($this->namespace)

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\CentralApp\Auth\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
@@ -29,7 +29,7 @@ class LoginController extends Controller
             $user = Auth::user();
 
             $user->tokens()->delete();
-            $token = $user->createToken('Members Management')->plainTextToken;
+            $token = $user->createToken('Dashboard Admin')->plainTextToken;
 
             $data['user'] = new UserResource($user);
             $data['token'] = $token;
@@ -41,7 +41,7 @@ class LoginController extends Controller
         }
 
         throw ValidationException::withMessages([
-            'message' => ['The provided credentials are incorrect.'],
+            'message' => ['Wrong email or password'],
         ]);
     }
 }

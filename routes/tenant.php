@@ -6,12 +6,12 @@ use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
-use App\Http\Controllers\Auth\EmailVerificationController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\Auth\SendEmailVerificationTokenController;
+use App\Http\Controllers\TenantApp\Auth\EmailVerificationController;
+use App\Http\Controllers\TenantApp\Auth\ForgotPasswordController;
+use App\Http\Controllers\TenantApp\Auth\LoginController;
+use App\Http\Controllers\TenantApp\Auth\LogoutController;
+use App\Http\Controllers\TenantApp\Auth\ResetPasswordController;
+use App\Http\Controllers\TenantApp\Auth\SendEmailVerificationTokenController;
 use \App\Http\Controllers\Admin\UserController;
 use \App\Http\Controllers\Admin\RoleController;
 use \App\Http\Controllers\Admin\PlansController;
@@ -31,17 +31,17 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::prefix('v1/api')->middleware([
+
+
+
+Route::as('lms.')->prefix('v1/api/lms')->middleware([
     'api', 'check_language' , 'json.response',
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
 
+    Route::get('/' , function (){dd('tenant app');});
     Route::post('/login', LoginController::class)->name('login.api');
-    Route::middleware(['auth:sanctum' , 'role:super_admin'])->group(function (){
-        Route::apiResource('users' , \App\Http\Controllers\Admin\UserController::class);
-        Route::get('allowed-permissions' , [RoleController::class , 'getAllowedPermissions']);
-    });
     Route::delete('/logout', LogoutController::class)->name('logout.api')->middleware('auth:sanctum');
     Route::post('/register', RegistrationController::class)->name('register.api');
     Route::post('/verify-email', EmailVerificationController::class)->name('verifyToken.api');
@@ -49,9 +49,6 @@ Route::prefix('v1/api')->middleware([
     Route::post('/forget-password', ForgotPasswordController::class)->name('requestPasswordToken.api');
     Route::patch('/reset-password', ResetPasswordController::class)->name('resetPassword.api');
 
-    Route::middleware(['auth:sanctum' , 'permission'])->group(function () {
-        Route::apiResource('users' , UserController::class);
-        Route::apiResource('roles' , RoleController::class);
-    });
-
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('roles', RoleController::class);
 });

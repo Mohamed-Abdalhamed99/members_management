@@ -24,7 +24,9 @@ class Tenant extends BaseTenant implements TenantWithDatabase
         return view('admin.tenants.index', compact('tenants'));
     }
 
+
     public function plans(){
         return $this->belongsTo(Plan::class , 'plan_id');
     }
+
 }

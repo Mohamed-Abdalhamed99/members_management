@@ -1,18 +1,12 @@
 <?php
 
-use App\Http\Controllers\Auth\EmailVerificationController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\Auth\SendEmailVerificationTokenController;
 use \App\Http\Controllers\Admin\UserController;
 use \App\Http\Controllers\Admin\RoleController;
 use \App\Http\Controllers\Admin\PlansController;
-use \App\Http\Controllers\Auth\RegistrationController;
 use \App\Http\Controllers\Admin\TenantController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -25,29 +19,46 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', function () {
+    dd('central app');
+});
+
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/login', LoginController::class)->name('login.api');
-Route::middleware(['auth:sanctum' , 'role:super_admin'])->group(function (){
-    Route::apiResource('users' , \App\Http\Controllers\Admin\UserController::class);
-    Route::get('allowed-permissions' , [RoleController::class , 'getAllowedPermissions']);
-});
-Route::delete('/logout', LogoutController::class)->name('logout.api')->middleware('auth:sanctum');
-Route::post('/register', RegistrationController::class)->name('register.api');
-Route::post('/verify-email', EmailVerificationController::class)->name('verifyToken.api');
-Route::post('/request-email-token', SendEmailVerificationTokenController::class)->name('requestEmailToken.api');
-Route::post('/forget-password', ForgotPasswordController::class)->name('requestPasswordToken.api');
-Route::patch('/reset-password', ResetPasswordController::class)->name('resetPassword.api');
+// central dashboard authentication
+Route::prefix('/dashboard')->as('dashboard.')->group(function () {
+   Route::namespace('App\Http\Controllers\CentralApp\Auth\Dashboard')->group(function (){
+       Route::post('/login', LoginController::class)->name('login.api');
+       Route::delete('/logout', LogoutController::class)->name('logout.api')->middleware('auth:sanctum');
+       Route::post('/forget-password', ForgotPasswordController::class)->name('requestPasswordToken.api');
+       Route::patch('/reset-password', ResetPasswordController::class)->name('resetPassword.api');
+   });
 
-Route::apiResource('tenants' , TenantController::class);
+    Route::middleware(['auth:sanctum', 'permission'])->group(function () {
+        Route::apiResource('users', UserController::class);
+        Route::apiResource('roles', RoleController::class);
+    });
 
-Route::middleware(['auth:sanctum' , 'permission'])->group(function () {
-
-    Route::apiResource('users' , UserController::class);
-    Route::apiResource('roles' , RoleController::class);
-    Route::apiResource('plans' , PlansController::class);
 });
 
+// tenant authentication
+Route::prefix('accounts')->namespace('App\Http\Controllers\CentralApp\Auth\Tenant')->as('accounts.')->group(function () {
+    Route::post('check-domain' , CheckDomainController::class)->name('check_domain');
+    Route::post('/register', 'RegistrationController@register')->name('register.api');
 
+});
+
+
+Route::apiResource('tenants', TenantController::class);
+
+
+
+
+
+Route::get('test' , function (){
+    $routes = collect(\Route::getRoutes())->map(function ($route) { return $route->getName(); });
+        dd($routes);
+});

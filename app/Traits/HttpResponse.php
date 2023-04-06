@@ -78,4 +78,12 @@ trait HttpResponse
     public function responseForbidden($message){
         return response()->json(['message' => $message], Response::HTTP_FORBIDDEN);
     }
+
+    /**
+     * Return statusCode 401
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function responseUnauthorized($errors){
+        return response()->json(['errors' => $errors], Response::HTTP_UNAUTHORIZED);
+    }
 }

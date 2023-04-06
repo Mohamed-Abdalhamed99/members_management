@@ -35,6 +35,7 @@ class CreatePermissionTables extends Migration
             $table->string('icon')->nullable();
             $table->integer('appear')->default(1);
             $table->integer('ordering')->default(0);
+            $table->string('app');
             $table->timestamps();
 
             $table->unique(['name', 'guard_name']);

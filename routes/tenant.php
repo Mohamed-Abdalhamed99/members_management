@@ -40,6 +40,10 @@ Route::as('lms.')->prefix('v1/api/lms')->middleware([
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
 
+    Route::middleware('auth:sanctum')->get('/course', function (Request $request) {
+        return 'course';
+    });
+
     Route::get('/' , function (){dd('tenant app');});
     Route::post('/login', LoginController::class)->name('login.api');
     Route::delete('/logout', LogoutController::class)->name('logout.api')->middleware('auth:sanctum');

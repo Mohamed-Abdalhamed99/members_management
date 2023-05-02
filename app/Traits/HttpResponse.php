@@ -31,7 +31,7 @@ trait HttpResponse
         return response()->json([
             'status' => 'success',
             'status_code' => Response::HTTP_OK,
-            'data' => $message
+            'message' => $message
         ], Response::HTTP_OK);
     }
 

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,6 +28,7 @@ Route::get('/', function () {
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 
 // central dashboard authentication
 Route::prefix('/dashboard')->as('dashboard.')->group(function () {
@@ -59,6 +61,5 @@ Route::apiResource('tenants', TenantController::class);
 
 
 Route::get('test' , function (){
-    $routes = collect(\Route::getRoutes())->map(function ($route) { return $route->getName(); });
-        dd($routes);
+    return asset('media_library/cfd21b47a542828023a1fef502e0f872.jpg');
 });

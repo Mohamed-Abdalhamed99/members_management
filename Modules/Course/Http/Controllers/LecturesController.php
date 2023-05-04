@@ -2,38 +2,37 @@
 
 namespace Modules\Course\Http\Controllers;
 
+use App\Models\Chapter;
+use App\Models\Lecture;
+use App\Traits\HttpResponse;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Course\Http\Requests\CreateLectureRequest;
+use Modules\Course\Http\Requests\UpdateLectureRequest;
+use Modules\Course\Transformers\LectureResource;
 
 class LecturesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
-    public function index()
-    {
-        return view('course::index');
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('course::create');
-    }
+    use HttpResponse;
 
     /**
      * Store a newly created resource in storage.
      * @param Request $request
      * @return Renderable
      */
-    public function store(Request $request)
+    public function store(CreateLectureRequest $request)
     {
-        //
+        $chapter = Chapter::findOrFail($request->chapter_id);
+        $sort_order = $chapter->lectures()->count() + 1;
+        $chapter->lectures()->create([
+            'name' => $request->name,
+            'chapter_id' => $request->chapter_id,
+            'completed_rule' => $request->completed_rule,
+            'sort' => $sort_order
+        ]);
+        return $this->responseOk('تم إضافة المحتوي بنجاح');
     }
 
     /**
@@ -41,20 +40,11 @@ class LecturesController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function show($id)
+    public function show(Lecture $lecture)
     {
-        return view('course::show');
+        return $this->respond(new LectureResource($lecture));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('course::edit');
-    }
 
     /**
      * Update the specified resource in storage.
@@ -62,9 +52,10 @@ class LecturesController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(UpdateLectureRequest $request, Lecture $lecture)
     {
-        //
+        $lecture->update($request->validated());
+        return $this->responseOk('تم النعديل بنجاح');
     }
 
     /**
@@ -72,8 +63,9 @@ class LecturesController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function destroy($id)
+    public function destroy(Lecture $lecture)
     {
-        //
+        $lecture->delete();
+        return $this->responseOk('تم الحذف بنجاح');
     }
 }

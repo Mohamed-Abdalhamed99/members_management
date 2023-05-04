@@ -25,4 +25,15 @@ class Lecture extends Model
     {
         return $this->hasMany(LectureContent::class, 'lecture_id', 'id');
     }
+
+    public function getCompleteRuleNameAttribute()
+    {
+        if ($this->completed_rule == self::MARK_AS_LEARNED_CHECKBOX) {
+            return 'وضع علامة علي انهاء الدرس';
+        } elseif ($this->completed_rule == self::PASSING_QUIZE) {
+            return 'الانتهاء من الاختبار';
+        } elseif ($this->completed_rule == self::COMPLETE_VIDEO_PERCENTAGE) {
+            return 'الانتهاء من مشاهدة الدرس';
+        }
+    }
 }

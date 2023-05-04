@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('lectures', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('chapter_id');
-            $table->string('name')->unique();
+            $table->string('name');
             $table->unsignedInteger('sort');
             $table->unsignedTinyInteger('completed_rule');
             $table->timestamps();

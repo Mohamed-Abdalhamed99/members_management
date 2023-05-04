@@ -14,7 +14,8 @@ class CreateChapterRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+           'course_id' => 'required|exists:courses,id',
+           'name' => 'required|string|max:255',
         ];
     }
 

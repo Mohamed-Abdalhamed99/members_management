@@ -1,0 +1,11 @@
+{
+    "name": "VidoeLibrary",
+    "alias": "vidoelibrary",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\VidoeLibrary\\Providers\\VidoeLibraryServiceProvider"
+    ],
+    "files": []
+}

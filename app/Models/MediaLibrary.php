@@ -11,7 +11,7 @@ class MediaLibrary extends Model
 
     // addition methods
     public const UPLOADED = 'upload';
-    public const EMBED  = 'embed';
+    public const EMBED = 'embed';
 
     protected $table = 'media_library';
 

@@ -2,6 +2,7 @@
 
 namespace Modules\Course\Http\Requests;
 
+use App\Models\Lecture;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateLectureRequest extends FormRequest
@@ -14,7 +15,9 @@ class UpdateLectureRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'required|string|max:255',
+            'chapter_id' => 'required|exists:chapters,id',
+            'completed_rule' => "required|in:".Lecture::MARK_AS_LEARNED_CHECKBOX.','.Lecture::COMPLETE_VIDEO_PERCENTAGE.','.Lecture::PASSING_QUIZE
         ];
     }
 

@@ -35,7 +35,7 @@ class Course extends Model implements HasMedia
 
     public function chapters()
     {
-        return $this->hasMany(Chapter::class, 'course_id', 'id');
+        return $this->hasMany(Chapter::class, 'course_id', 'id')->orderBy('sort');
     }
 
 }

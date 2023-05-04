@@ -18,6 +18,6 @@ class Chapter extends Model
 
     public function lectures()
     {
-        return $this->hasMany(Lecture::class, 'chapter_id', 'id');
+        return $this->hasMany(Lecture::class, 'chapter_id', 'id')->orderBy('sort');
     }
 }

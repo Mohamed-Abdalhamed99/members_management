@@ -61,5 +61,5 @@ Route::apiResource('tenants', TenantController::class);
 
 
 Route::get('test' , function (){
-    return asset('media_library/cfd21b47a542828023a1fef502e0f872.jpg');
+    return \App\Models\LectureContent::findOrFail(5);
 });

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('chapters', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('course_id');
-            $table->string('name')->unique();
+            $table->string('name');
             $table->unsignedInteger('sort');
             $table->timestamps();
 

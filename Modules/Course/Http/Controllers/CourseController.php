@@ -13,6 +13,7 @@ use Modules\Course\Http\Requests\CreateCoursesCategoriesRequest;
 use Modules\Course\Http\Requests\UpdateCourseLogoRequest;
 use Modules\Course\Http\Requests\UpdateCourseRequest;
 use Modules\Course\Http\Requests\UpdateCoursesCategoriesRequest;
+use Modules\Course\Transformers\ChapterResource;
 use Modules\Course\Transformers\CourseResource;
 use Modules\Course\Transformers\CoursesResource;
 use Modules\Course\Transformers\ShowCourseResource;
@@ -86,6 +87,7 @@ class CourseController extends Controller
     public function show(Course $course)
     {
         $data['course'] = new ShowCourseResource($course);
+        $data['chapters'] = ChapterResource::collection($course->chapters);
         return $this->respond($data);
     }
 

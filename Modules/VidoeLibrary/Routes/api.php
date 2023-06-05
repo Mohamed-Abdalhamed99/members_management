@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
+use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
+use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +27,5 @@ Route::as('lms.')->prefix('lms')->middleware([
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
-    Route::middleware('auth:sanctum')->get('/course', function (Request $request) {
-        return $request->user();
-    });
+    Route::apiResource('video_library' , Modules\VidoeLibrary\Http\Controllers\VidoeLibraryController::class);
 });

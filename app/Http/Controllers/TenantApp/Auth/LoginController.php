@@ -33,9 +33,9 @@ class LoginController extends Controller
 
             $data['user'] = new UserResource($user);
             $data['token'] = $token;
-            $data['role'] = $user->roles[0]->name;
+          //  $data['role'] = $user->roles[0]->name;
             //get user permissions
-            $data['permissions'] = PermissionResource::collection($user->getAllPermissions()->where('appear' , 1)->sortBy('ordering')) ;
+            //$data['permissions'] = PermissionResource::collection($user->getAllPermissions()->where('appear' , 1)->sortBy('ordering')) ;
 
             return $this->respond($data);
         }

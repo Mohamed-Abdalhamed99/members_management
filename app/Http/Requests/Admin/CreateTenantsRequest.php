@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use App\Rules\TenantIdRule;
+use App\Rules\UniqueTenantEmailRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateTenantsRequest extends FormRequest
@@ -23,27 +24,12 @@ class CreateTenantsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'domain' => ['required' , 'string' , 'max:255' , 'unique:domains,domain'],
+            'domain' => ['required' , 'string' , 'max:255' , 'unique:tenants,id'],
             'first_name' => ['required' , 'string' , 'max:255'],
             'last_name' => ['required' , 'string' , 'max:255'],
-            'email' => ['required' , 'email'],
+            'email' => ['required' , 'email' ,  new UniqueTenantEmailRule()],
             'password' => ['required' , 'string' , 'confirmed'],
-            'telephone' => ['nullable' , 'string' , 'unique:users,telephone'],
-            'address' => ['nullable' , 'string'],
-            'avatar' => ['nullable' , 'image'],
-            'plan_id' => ['required' , 'exists:plans,id'],
-
-            // company attributes
-            'company_name' => ['required' , 'string' , 'max:255' , new TenantIdRule()],
-            'company_email' => ['nullable' , 'email'],
-            'company_phone' => ['nullable' , 'string'],
-            'company_fax' => ['nullable' , 'string'],
-            'company_website' => ['nullable' , 'string' ,'max:255'],
-            'company_bank' => ['nullable' , 'string'],
-            'company_bank_account' => ['nullable' , 'string'],
-            'company_notes' => ['nullable' , 'string'],
-            'company_fiscal_code' => ['nullable' , 'string'],
-            'company_logo' => ['nullable' , 'image'],
+          //  'plan_id' => ['required' , 'exists:plans,id']
         ];
     }
 }

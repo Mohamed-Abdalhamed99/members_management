@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Artisan;
 
 
 
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -61,5 +63,7 @@ Route::apiResource('tenants', TenantController::class);
 
 
 Route::get('test' , function (){
-    return \App\Models\LectureContent::findOrFail(5);
+    $content = \App\Models\LectureContent::findOrFail(10);
+
+    return new \Modules\Course\Transformers\LectureResource($content);
 });

@@ -1,5 +1,6 @@
 {
     "Course": true,
     "MediaLibrary": true,
-    "VidoeLibrary": true
+    "VidoeLibrary": true,
+    "Product": true
 }

@@ -29,7 +29,12 @@ class RegistrationController
     {
         $data = $request->validated();
 
-        $newTenant = Tenant::create($data);
+        $newTenant = Tenant::create([
+            'id' => $request->domain,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email
+        ]);
         $newTenant->domains()->create(['domain' => $request->domain . '.' . config('tenancy.central_domains')[0]]);
 
         // create permissions
@@ -48,9 +53,7 @@ class RegistrationController
                 'first_name' => $newTenant->first_name,
                 'last_name' => $newTenant->last_name,
                 'email' => $newTenant->email,
-                'password' => Hash::make($newTenant->password),
-                'telephone' => $newTenant->telephone,
-                'address' => $newTenant->address,
+                'password' => Hash::make($request->password)
                 //    'avatar' => $this->storeFile($request->logo , 'media/companies')
             ]);
             $tenantAdmin->assignRole($role->name);
@@ -64,23 +67,6 @@ class RegistrationController
 
             $newTenant->notify(new SendEmailTokenNotification($tokenData->token));
 
-            // create company
-            $company = [
-                'name' => $request->company_name,
-                'email' => $request->company_email,
-                'phone' => $request->company_phone,
-                'fax' => $request->company_fax,
-                'website' => $request->company_website,
-                'bank' => $request->company_bank,
-                'bank_account' => $request->company_bank_account,
-                'notes' => $request->company_notes,
-                'fiscal_code' => $request->company_fiscal_code,
-            ];
-
-            if($request->company_logo){
-                $company['logo'] = $this->storeFile($request->logo , 'media/companies');
-            }
-            $company = Company::create($company);
         });
 
         return $this->respond(new TenantResource($newTenant));

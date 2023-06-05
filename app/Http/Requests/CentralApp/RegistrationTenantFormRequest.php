@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\CentralApp;
 
+use App\Rules\UniqueTenantEmailRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegistrationTenantFormRequest extends FormRequest
@@ -25,7 +26,7 @@ class RegistrationTenantFormRequest extends FormRequest
             'domain' => 'required|string|unique:tenants,id|max:255',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email',
+            'email' => ['required', 'email' , new UniqueTenantEmailRule()],
             'password' => 'required|confirmed|min:8',
         ];
     }

@@ -10,19 +10,36 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class LectureContent extends Model implements HasMedia
 {
-    use HasFactory , InteractsWithMedia;
+    use HasFactory, InteractsWithMedia;
 
     // content type
     public const VIDEO = 1;
-    public const PDF = 2;
-    public const ARTICLE = 3;
-    public const VOICE = 4;
-    public const DOCUMENT = 5;
+    public const ARTICLE = 2;
+    public const VOICE = 3;
+    public const DOCUMENT = 4;
 
     protected $guarded = [];
 
     public function lecture()
     {
-        return $this->belongsTo(Lecture::class , 'lecture_id' , 'id');
+        return $this->belongsTo(Lecture::class, 'lecture_id', 'id');
+    }
+
+    public function video()
+    {
+        return $this->belongsTo(VideoLibrary::class, 'video_id', 'id');
+    }
+
+    public function getTypeNameAttribute()
+    {
+        if ($this->type == self::VIDEO) {
+            return 'فيديو';
+        } elseif ($this->type == self::ARTICLE) {
+            return 'مقالة';
+        }elseif ($this->type == self::VOICE) {
+            return 'تسجيل صوتي';
+        }elseif ($this->type == self::DOCUMENT) {
+            return 'ملف';
+        }
     }
 }

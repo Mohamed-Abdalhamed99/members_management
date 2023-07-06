@@ -11,10 +11,11 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
-    use HasApiTokens, HasFactory, Notifiable , SoftDeletes , HasRoles;
+    use HasApiTokens, HasFactory, Notifiable , SoftDeletes , HasRoles , InteractsWithMedia;
 
     protected $guard_name = 'api';
 
@@ -23,18 +24,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'first_name',
-        'last_name',
-        'email',
-        'password',
-        'telephone',
-        'address',
-        'image',
-        'email_verified_at',
-        'telephone_verified_at',
-        'status'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -53,6 +43,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'mobile_verified_at' => 'datetime',
     ];
 
     public function getFullNameAttribute()

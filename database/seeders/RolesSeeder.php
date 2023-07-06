@@ -20,6 +20,6 @@ class RolesSeeder extends Seeder
             $super_admin->givePermissionTo($permission->name);
         }
 
-        $assistant = Role::create(['name' => 'assistant' , 'guard_name' => 'api']);
+      //  $assistant = Role::create(['name' => 'assistant' , 'guard_name' => 'api']);
     }
 }

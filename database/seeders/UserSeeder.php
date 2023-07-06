@@ -23,16 +23,16 @@ class UserSeeder extends Seeder
             'last_name' => 'admin',
             'email' => 'admin@admin.com',
             'password' =>  Hash::make('admin'),
-            'telephone' => $faker->phoneNumber,
+            'mobile' => $faker->phoneNumber,
             'address' => $faker->address,
             'avatar' => 'avatar.png',
             'email_verified_at' => now(),
-            'telephone_verified_at' => now(),
+            'mobile_verified_at' => now(),
             'status' => '1',
         ]);
 
-        $super_admin->assignRole(Role::first()->name);
+        $super_admin->assignRole('super_admin');
 
-        User::factory(100)->create();
+        User::factory(10)->create();
     }
 }

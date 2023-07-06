@@ -9,7 +9,10 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class CustomPathGenerator implements BasePathGenerator
 {
     public function getPath(Media $media): string {
-        return tenant()->id.'/'.$this->getBasePath($media) .'/';
+        if(tenant()){
+            return tenant()->id.'/'.$this->getBasePath($media) .'/';
+        }
+        return 'dashboard/'.$this->getBasePath($media) .'/';
     }
 
     /*

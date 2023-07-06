@@ -58,7 +58,7 @@ class RouteServiceProvider extends ServiceProvider
         foreach ($this->centralDomains() as $domain) {
             Route::prefix('v1/api')
                 ->domain($domain)
-                ->middleware(['api' , 'check_language' , 'json.response'])
+                ->middleware(['create_permissions','api' , 'check_language' , 'json.response'])
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
         }

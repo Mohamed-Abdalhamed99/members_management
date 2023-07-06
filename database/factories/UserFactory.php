@@ -23,11 +23,11 @@ class UserFactory extends Factory
             'last_name' => $this->faker->lastName,
             'email' => $this->faker->email,
             'password' =>  Hash::make('admin'),
-            'telephone' => $this->faker->phoneNumber,
+            'mobile' => $this->faker->phoneNumber,
             'address' => $this->faker->address,
             'avatar' => 'avatar.png',
             'email_verified_at' => now(),
-            'telephone_verified_at' => now(),
+            'mobile_verified_at' => now(),
             'status' => '1',
         ];
     }

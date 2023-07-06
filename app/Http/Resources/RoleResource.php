@@ -18,7 +18,7 @@ class RoleResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'permissions' => collect($this->permissions)->transform(function ($item){
-                return [ 'id' => $item->id, 'display_name' => $item->{'display_name_'.app()->getLocale()}];
+                return [ 'id' => $item->id, 'name' => $item->name];
             })
         ];
     }

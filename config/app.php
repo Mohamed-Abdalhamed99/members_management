@@ -104,7 +104,7 @@ return [
     |
     | This locale will be used by the Faker PHP library when generating fake
     | data for your database seeds. For example, this will be used to get
-    | localized telephone numbers, street address information and more.
+    | localized mobile numbers, street address information and more.
     |
     */
 
@@ -187,7 +187,7 @@ return [
          */
         Spatie\Permission\PermissionServiceProvider::class,
         App\Providers\TenancyServiceProvider::class,
-
+        Jenssegers\Agent\AgentServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -212,6 +212,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
     ])->toArray(),
 
 ];

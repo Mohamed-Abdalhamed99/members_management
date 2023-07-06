@@ -17,10 +17,13 @@ class PlansResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'description' => $this->description,
-            'price' => $this->price,
-            'licenses' => collect($this->permissions)->transform(function ($item){
-                return [ 'id' => $item->id, 'display_name' => $item->{'display_name_'.app()->getLocale()}];
+            'annually_price' => [
+                'total_price' => $this->annually_price,
+                'price_per_month' => round($this->annually_price/12 , 2)
+            ],
+            'monthly_price' => $this->monthly_price,
+            'features' => collect($this->features)->transform(function ($item){
+                return [ 'id' => $item->id, 'feature' => $item->feature];
             })
         ];
     }

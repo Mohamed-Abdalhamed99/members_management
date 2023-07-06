@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('plan_permission', function (Blueprint $table) {
+        Schema::create('plans', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('plan_id');
-            $table->unsignedBigInteger('permission_id');
+            $table->string('name')->unique();
+            $table->double('annually_price')->comment('amount to pay in a year');
+            $table->double('monthly_price')->comment('amount to pay in a month');
             $table->timestamps();
-
-            $table->foreign('plan_id')->references('id')->on('plans');
-            $table->foreign('permission_id')->references('id')->on('permissions');
         });
     }
 
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('plan_permission');
+        Schema::dropIfExists('plans');
     }
 };

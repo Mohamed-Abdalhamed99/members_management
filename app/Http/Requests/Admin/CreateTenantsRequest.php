@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use App\Rules\TenantIdRule;
 use App\Rules\UniqueTenantEmailRule;
+use App\Rules\UniqueTenantmobileRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateTenantsRequest extends FormRequest
@@ -28,8 +29,7 @@ class CreateTenantsRequest extends FormRequest
             'first_name' => ['required' , 'string' , 'max:255'],
             'last_name' => ['required' , 'string' , 'max:255'],
             'email' => ['required' , 'email' ,  new UniqueTenantEmailRule()],
-            'password' => ['required' , 'string' , 'confirmed'],
-          //  'plan_id' => ['required' , 'exists:plans,id']
+            'mobile' => ['required' , 'string' ,  new UniqueTenantmobileRule()],
         ];
     }
 }

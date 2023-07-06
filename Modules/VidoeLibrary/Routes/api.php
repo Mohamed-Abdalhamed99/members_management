@@ -16,14 +16,14 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 */
 
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['create_permissions','auth:sanctum' , 'dashboard'])->group(function () {
     Route::apiResource('video_library' , Modules\VidoeLibrary\Http\Controllers\VidoeLibraryController::class);
 
 });
 
 
 Route::as('lms.')->prefix('lms')->middleware([
-    'api', 'check_language', 'json.response',
+    'create_permissions', 'api', 'check_language', 'json.response', 'lms',
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->group(function () {

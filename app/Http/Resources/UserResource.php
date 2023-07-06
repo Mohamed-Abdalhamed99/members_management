@@ -21,11 +21,14 @@ class UserResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'email' => $this->email,
-            'telephone' => $this->telephone,
-            'avatar' => asset('media/users/'.$this->avatar),
+            'mobile' => $this->mobile,
+            'image' => ($this->getFirstMedia('users') == null) ? asset('media1/users/'.$this->avatar) : $this->getFirstMedia('users')->original_url,
             'role' => collect($this->roles)->transform(function($role){
-                return ['name' => $role->name];
+                return ['id' => $role->id , 'name' => $role->name];
             }),
+            'permissions' => collect($this->getAllPermissions())->transform(function ($item){
+                return [ 'id' => $item->id, 'name' => $item->name];
+            })
         ];
     }
 }

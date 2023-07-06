@@ -13,6 +13,10 @@ class Tenant extends BaseTenant implements TenantWithDatabase
 {
     use HasDatabase, HasDomains ,Notifiable;
 
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $primaryKey = 'id';
+
     /**
      * Display a listing of the resource.
      *

@@ -29,13 +29,6 @@ class CreatePermissionTables extends Migration
             $table->bigIncrements('id'); // permission id
             $table->string('name');       // For MySQL 8.0 use string('name', 125);
             $table->string('guard_name'); // For MySQL 8.0 use string('guard_name', 125);
-            $table->string('display_name_ar');
-            $table->string('display_name_en');
-            $table->string('route')->nullable();
-            $table->string('icon')->nullable();
-            $table->integer('appear')->default(1);
-            $table->integer('ordering')->default(0);
-            $table->string('app');
             $table->timestamps();
 
             $table->unique(['name', 'guard_name']);

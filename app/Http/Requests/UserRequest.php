@@ -26,7 +26,7 @@ class UserRequest extends FormRequest
             'last_name' => ['required' , 'string' , 'max:255'],
             'email' => ['required' , 'email' , 'unique:users,email'],
             'password' => ['required' , 'string' , 'confirmed'],
-            'telephone' => ['nullable' , 'string' , 'unique:users,telephone'],
+            'mobile' => ['nullable' , 'string' , 'unique:users,mobile'],
             'address' => ['nullable' , 'string'],
             'image' => ['nullable' , 'image'],
             'role_id' => ['required' , 'exists:roles,id' , 'numeric'],

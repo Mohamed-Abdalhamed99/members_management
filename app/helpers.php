@@ -12,7 +12,7 @@ if (! function_exists('generateToken')) {
     function generateToken()
     {
         do {
-            $token = mt_rand(100000, 999999);
+            $token = mt_rand(11111111, 99999999);
         } while (Token::where('token', $token)->exists());
 
         return (string) $token;

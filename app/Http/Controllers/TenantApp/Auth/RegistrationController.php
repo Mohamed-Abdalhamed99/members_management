@@ -30,7 +30,7 @@ class RegistrationController
              'last_name'    => $request->last_name,
              'email'        => $request->email,
              'gender'       => $request->gender,
-             'telephone'    => $request->telephone,
+             'mobile'    => $request->mobile,
              'password'     => Hash::make($request->password),
              'status'       => 1
         ])

@@ -18,20 +18,20 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 */
 
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum' , 'dashboard'])->group(function () {
 
 });
 
 
 Route::as('lms.')->prefix('lms')->middleware([
-    'api', 'check_language', 'json.response' ,
+    'api', 'check_language', 'json.response' , 'lms',
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
 
     Route::middleware('auth:sanctum')->group(function (){
         Route::apiResource('products' , \Modules\Product\Http\Controllers\ProductController::class);
-        Route::delete('delete-product-media/{media}' , [ProductController::class ,'deleteProductMedia']);
+        Route::delete('delete-product-media/{media}' , [ProductController::class ,'deleteProductMedia'])->name('delete-product-media');
     });
 
 

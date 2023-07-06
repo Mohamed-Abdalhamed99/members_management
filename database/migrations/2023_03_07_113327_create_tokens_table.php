@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('token')->unique();
             $table->string('email')->index()->nullable();
-            $table->string('telephone')->index()->nullable();
+            $table->string('mobile')->index()->nullable();
             $table->string('type');
             $table->boolean('verified')->default(false);
             $table->timestamps();

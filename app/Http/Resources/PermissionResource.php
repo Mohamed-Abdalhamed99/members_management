@@ -16,9 +16,7 @@ class PermissionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'display_name' => $this->{'display_name_'.app()->getLocale()},
-            'icon' => $this->icon,
-            'route' => $this->route,
+            'name' => $this->name
         ];
     }
 }

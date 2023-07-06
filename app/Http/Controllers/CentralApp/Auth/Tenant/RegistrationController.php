@@ -5,21 +5,21 @@ namespace App\Http\Controllers\CentralApp\Auth\Tenant;
 use App\Enums\VerificationEnum;
 use App\Http\Requests\CentralApp\RegistrationTenantFormRequest;
 use App\Http\Resources\TenantResource;
-use App\Models\Company;
 use App\Models\Tenant;
 use App\Models\Token;
 use App\Models\User;
-use App\Notifications\SendEmailTokenNotification;
 use App\Traits\HttpResponse;
 use App\Traits\StoreFile;
+use App\Traits\TwilioSMS;
+use Exception;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Route;
 
 class RegistrationController
 {
-    use HttpResponse , StoreFile;
+    use HttpResponse , StoreFile , TwilioSMS;
     /**
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -29,50 +29,69 @@ class RegistrationController
     {
         $data = $request->validated();
 
-        $newTenant = Tenant::create([
+        $tenant = Tenant::create([
             'id' => $request->domain,
+            'domain' => $request->domain,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
-            'email' => $request->email
+            'email' => $request->email,
+            'mobile' => $request->mobile,
         ]);
-        $newTenant->domains()->create(['domain' => $request->domain . '.' . config('tenancy.central_domains')[0]]);
 
-        // create permissions
-        $permissions = Permission::where('app' , 'tenant_app')->get();
+        $tenant->domains()->create(['domain' => $request->domain . '.' . config('tenancy.central_domains')[0]]);
 
-        $newTenant->run(function () use ($permissions, $newTenant , $request) {
-            //create roles and assign permission to the role
-            $role = Role::create(['name' => 'super_admin', 'guard_name' => 'api']);
-            foreach ($permissions as $permission) {
-                Permission::create(['name' => $permission->name, 'display_name_ar' => $permission->display_name_ar, 'display_name_en' => $permission->display_name_en, 'guard_name' => $permission->guard_name, 'route' => $permission->route, 'module' => $permission->module, 'as' => $permission->as, 'icon' => $permission->icon, 'appear' => $permission->appear, 'ordering' => $permission->ordering]);
+        $tenant->run(function () use ($tenant , $request) {
 
-                $role->givePermissionTo($permission->name);
+            // create super_admin role and give permissions to it
+            $role = Role::create(['name' => 'super_admin' , 'guard_name'=>'api' ]);
+
+            // create permissions
+            $routes = Route::getRoutes()->getRoutes();
+            foreach ( $routes as $route ) {
+                if ( $route->getName() != '' && array_key_exists( 'middleware', $route->getAction() ) && in_array( 'lms', $route->getAction()[ 'middleware' ] ) ) {
+                    $permission = Permission::where( 'name', $route->getName() )->exists();
+                    if ( !$permission ) {
+                        $permission = Permission::create( [
+                            'name' => $route->getName(),
+                            'guard_name' => 'api'
+                        ] );
+
+                        $role->givePermissionTo($permission->name);
+                    }
+                }
             }
 
-            $tenantAdmin = User::create([
-                'first_name' => $newTenant->first_name,
-                'last_name' => $newTenant->last_name,
-                'email' => $newTenant->email,
-                'password' => Hash::make($request->password)
-                //    'avatar' => $this->storeFile($request->logo , 'media/companies')
-            ]);
-            $tenantAdmin->assignRole($role->name);
+            // creat admin with tenant info
+        $tenantAdmin = User::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'mobile' => $request->mobile
+        ]);
 
-            // create token and send email verification
-            $tokenData = Token::create([
-                'token' =>  generateToken(),
-                'email' => $request->email,
-                'type' => VerificationEnum::Email
-            ]);
+          // assign super_admin role to the admin
+          $tenantAdmin->assignRole($role->name);
 
-            $newTenant->notify(new SendEmailTokenNotification($tokenData->token));
+          $opt = generateToken();
+
+          try{
+              $this->SendSMS($request->mobile , ' رمز التحقق أكاديميات ' . $opt);
+          }catch(Exception $e){
+              return $this->responseUnProcess($e->getMessage());
+          }
+
+          Token::create( [
+              'token' =>  $opt,
+              'mobile' => $request->mobile,
+              'type' => VerificationEnum::MOBILE
+          ] );
 
         });
 
-        return $this->respond(new TenantResource($newTenant));
+
+
+        return $this->responseOk( 'تم ارسال رسالة التحقق من رقم الجوال' );
     }
-
-
 
 
 }

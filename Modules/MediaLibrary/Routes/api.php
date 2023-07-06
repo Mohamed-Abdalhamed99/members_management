@@ -15,38 +15,32 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 |
 */
 
-Route::middleware('auth:api')->get('/medialibrary', function (Request $request) {
-    return $request->user();
-});
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('get-uploaded-files' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'getUploadedFiles']);
-    Route::get('get-embedded-files' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'getEmbeddedFiles']);
-    Route::post('embed-file' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'embedFile']);
-    Route::post('update-embed-file/{mediaLibrary}' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'updateEmbeddedFile']);
-    Route::post('updated-uploaded-file/{mediaLibrary}' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'updateUploadedFile']);
-    Route::post('upload-file' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'uploadFile']);
-    Route::delete('delete-uploaded-files/{mediaLibrary}' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'deleteUploadedFiles']);
-    Route::delete('delete-embedded-files/{mediaLibrary}' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'deleteEmbeddedFiles']);
+
+Route::middleware(['create_permissions','auth:api' , 'dashboard'])->group(function () {
+    Route::get('get-uploaded-files' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'getUploadedFiles'])->name('get-uploaded-files');
+    Route::get('get-embedded-files' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'getEmbeddedFiles'])->name('get-embedded-files');
+    Route::post('embed-file' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'embedFile'])->name('embed-file');
+    Route::post('update-embed-file/{mediaLibrary}' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'updateEmbeddedFile'])->name('update-embed-file');
+    Route::post('updated-uploaded-file/{mediaLibrary}' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'updateUploadedFile'])->name('updated-uploaded-file');
+    Route::post('upload-file' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'uploadFile'])->name('upload-file');
+    Route::delete('delete-uploaded-files/{mediaLibrary}' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'deleteUploadedFiles'])->name('delete-uploaded-files');
+    Route::delete('delete-embedded-files/{mediaLibrary}' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'deleteEmbeddedFiles'])->name('delete-embedded-files');
 });
 
 Route::as('lms.')->prefix('lms')->middleware([
-    'api', 'check_language', 'json.response',
+    'create_permissions','api', 'check_language', 'json.response','lms',
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
-//    Route::middleware('auth:sanctum')->get('/course', function (Request $request) {
-//        return $request->user();
-//    });
 
-
-    Route::get('get-uploaded-files' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'getUploadedFiles']);
-    Route::get('get-embedded-files' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'getEmbeddedFiles']);
-    Route::post('embed-file' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'embedFile']);
-    Route::post('update-embed-file/{mediaLibrary}' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'updateEmbeddedFile']);
-    Route::post('updated-uploaded-file/{mediaLibrary}' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'updateUploadedFile']);
-    Route::post('upload-file' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'uploadFile']);
-    Route::delete('delete-uploaded-files/{mediaLibrary}' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'deleteUploadedFiles']);
-    Route::delete('delete-embedded-files/{mediaLibrary}' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'deleteEmbeddedFiles']);
+    Route::get('get-uploaded-files' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'getUploadedFiles'])->name('get-uploaded-files');
+    Route::get('get-embedded-files' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'getEmbeddedFiles'])->name('get-embedded-files');
+    Route::post('embed-file' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'embedFile'])->name('embed-file');
+    Route::post('update-embed-file/{mediaLibrary}' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'updateEmbeddedFile'])->name('update-embed-file');
+    Route::post('updated-uploaded-file/{mediaLibrary}' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'updateUploadedFile'])->name('updated-uploaded-file');
+    Route::post('upload-file' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'uploadFile'])->name('upload-file');
+    Route::delete('delete-uploaded-files/{mediaLibrary}' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'deleteUploadedFiles'])->name('delete-uploaded-files');
+    Route::delete('delete-embedded-files/{mediaLibrary}' , [\Modules\MediaLibrary\Http\Controllers\MediaLibraryController::class , 'deleteEmbeddedFiles'])->name('delete-embedded-files');
 
 });

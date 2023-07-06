@@ -22,11 +22,11 @@ class UpdatePlanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name_en' => ['required' , 'string' , 'max:255' , 'required:plans,name_en,'.$this->plan->id],
-            'name_ar' => ['required' , 'string' , 'max:255' , 'required:plans,name_ar,'.$this->plan->id],
-            'description' => ['nullable' , 'string'],
-            'price' => ['required' , 'numeric'],
-            'permissions' => ['required']
+            'name' => ['required' , 'string' , 'max:255' , 'unique:plans,name,'.$this->plan->id],
+            'annually_price' => ['required' , 'numeric'],
+            'monthly_price' => ['required' , 'numeric'],
+            'features' => ['nullable'  , 'array'],
+            'features.*' => ['string'  , 'max:255']
         ];
     }
 }

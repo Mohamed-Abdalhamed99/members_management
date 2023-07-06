@@ -1,15 +1,13 @@
 <?php
 
-use \App\Http\Controllers\Admin\UserController;
-use \App\Http\Controllers\Admin\RoleController;
-use \App\Http\Controllers\Admin\PlansController;
-use \App\Http\Controllers\Admin\TenantController;
+use App\Http\Controllers\CentralApp\Auth\Dashboard\MobileLoginController;
+use App\Http\Controllers\CentralApp\PlanController;
+use App\Http\Controllers\CentralApp\RoleController;
+use App\Http\Controllers\CentralApp\TenantController;
+use App\Http\Controllers\CentralApp\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
-
-
-
-
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,48 +20,40 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 
-Route::get('/', function () {
-    dd('central app');
-});
-
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-
 // central dashboard authentication
 Route::prefix('/dashboard')->as('dashboard.')->group(function () {
    Route::namespace('App\Http\Controllers\CentralApp\Auth\Dashboard')->group(function (){
        Route::post('/login', LoginController::class)->name('login.api');
-       Route::delete('/logout', LogoutController::class)->name('logout.api')->middleware('auth:sanctum');
+       Route::post('send-opt' , [MobileLoginController::class , 'sendOPT'])->name('send-opt');
+       Route::post('mobile-login' , [MobileLoginController::class , 'mobileLogin'])->name('mobile-login');
+       Route::post('verify-mobile' , [MobileLoginController::class , 'verifyMobile'])->name('verify-mobile');
+       Route::delete('/logout', LogoutController::class)->name('logout.api')->middleware(['auth:sanctum' , 'dashboard']);
        Route::post('/forget-password', ForgotPasswordController::class)->name('requestPasswordToken.api');
        Route::patch('/reset-password', ResetPasswordController::class)->name('resetPassword.api');
    });
 
-    Route::middleware(['auth:sanctum', 'permission'])->group(function () {
-        Route::apiResource('users', UserController::class);
+    Route::middleware(['dashboard' , 'auth:sanctum', 'permission'])->group(function () {
         Route::apiResource('roles', RoleController::class);
+        Route::get('permissions' , [RoleController::class , 'getPermissions'])->name('permissions.read')->middleware('permission:dashboard.permissions.read');
+        Route::apiResource('users', UserController::class);
+        Route::put('change-user-password/{user}' , [UserController::class , 'changePassword'])->name('change-user-password');
+        Route::apiResource('tenants', TenantController::class);
+        Route::apiResource('plans', PlanController::class);
+        Route::put('update-plan-feature/{plans_feature}' , [PlanController::class , 'updatePlanFeature'])->name('update-plan-feature');
+        Route::delete('delete-plan-feature/{plans_feature}' , [PlanController::class , 'deletePlanFeature'])->name('delete-plan-feature');
     });
-
 });
 
-// tenant authentication
+// tenant authenticati  on
 Route::prefix('accounts')->namespace('App\Http\Controllers\CentralApp\Auth\Tenant')->as('accounts.')->group(function () {
     Route::post('check-domain' , CheckDomainController::class)->name('check_domain');
     Route::post('/register', 'RegistrationController@register')->name('register.api');
-
 });
 
 
-Route::apiResource('tenants', TenantController::class);
+// Route::apiResource('tenants', TenantController::class);
 
 
-
-
-
-Route::get('test' , function (){
-    $content = \App\Models\LectureContent::findOrFail(10);
-
-    return new \Modules\Course\Transformers\LectureResource($content);
+Route::middleware('create_permissions')->get('test' , function (){
+    dd('central app');
 });

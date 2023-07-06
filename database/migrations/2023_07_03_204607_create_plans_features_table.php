@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('plans', function (Blueprint $table) {
+        Schema::create('plans_features', function (Blueprint $table) {
             $table->id();
-            $table->string('name_en')->unique();
-            $table->string('name_ar')->unique();
-            $table->text('description_en')->nullable();
-            $table->text('description_ar')->nullable();
-            $table->double('price');
+            $table->unsignedBigInteger('plan_id');
+            $table->string('feature');
             $table->timestamps();
+
+            $table->foreign('plan_id')->references('id')->on('plans')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('plans');
+        Schema::dropIfExists('plans_features');
     }
 };

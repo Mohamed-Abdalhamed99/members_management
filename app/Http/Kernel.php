@@ -3,7 +3,10 @@
 namespace App\Http;
 
 use App\Http\Middleware\CheckLanguage;
+use App\Http\Middleware\Dashboard;
 use App\Http\Middleware\ForceJsonResponse;
+use App\Http\Middleware\Lms;
+use App\Http\Middleware\PermissionsMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -71,8 +74,11 @@ class Kernel extends HttpKernel
         'check_language' => CheckLanguage::class,
 
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
-        'permission' => \App\Http\Middleware\PermissionMiddlewared::class,
+        'permission' => PermissionsMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
-        'json.response' => ForceJsonResponse::class
+        'create_permissions' => \App\Http\Middleware\CreatePermissionMiddlewared::class,
+        'json.response' => ForceJsonResponse::class,
+        'lms' => Lms::class,
+        'dashboard' => Dashboard::class
     ];
 }

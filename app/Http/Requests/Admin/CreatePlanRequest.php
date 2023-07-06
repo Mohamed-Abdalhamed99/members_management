@@ -22,11 +22,11 @@ class CreatePlanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name_en' => ['required' , 'string' , 'max:255' , 'required:plans,name_en'],
-            'name_ar' => ['required' , 'string' , 'max:255' , 'required:plans,name_ar'],
-            'description' => ['nullable' , 'string'],
-            'price' => ['required' , 'numeric'],
-            'permissions' => ['required']
+            'name' => ['required' , 'string' , 'max:255' , 'unique:plans,name'],
+            'annually_price' => ['required' , 'numeric'],
+            'monthly_price' => ['required' , 'numeric'],
+            'features' => ['required'  , 'array'],
+            'features.*' => ['string'  , 'max:255']
         ];
     }
 }

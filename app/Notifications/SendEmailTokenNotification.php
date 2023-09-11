@@ -44,11 +44,11 @@ class SendEmailTokenNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage())
-            ->subject(Lang::get('Verify Email Token'))
-            ->greeting(Lang::get('Welcome to Members Managment!'))
-            ->line(Lang::get('Your e-mail verification token is **:token**. It expires in :count minutes.',
-                ['count' => 60, 'token' => $this->token]))
-            ->line(Lang::get('If you did not request a verification token, no further action is required. Thank you.'));
+            ->subject(Lang::get('تفعيل البريد الالكتروني'))
+            ->greeting(Lang::get('مرحبا بكم في أكاديميات'))
+            ->line(Lang::get('برجاء تفعيل بريدك الالكتروني باستخدام رمز التحقق الموضح أدناه'))
+            ->line(Lang::get('رمز التحقق من البريد الالكتروني ** :token ** ',
+                ['token' => $this->token]));
     }
 
     /**

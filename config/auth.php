@@ -38,13 +38,17 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'users'
         ],
         'api' => [
             'driver' => 'sanctum',
             'provider' => 'users',
-            'hash' => false,
+            'hash' => false
         ],
+        'student' => [
+            'driver' => 'sanctum',
+            'provider' => 'students'
+        ]
     ],
 
     /*
@@ -68,6 +72,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'students' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Student::class,
         ],
 
         // 'users' => [
@@ -97,6 +105,12 @@ return [
 
     'passwords' => [
         'users' => [
+            'provider' => 'users',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'students' => [
             'provider' => 'users',
             'table' => 'password_reset_tokens',
             'expire' => 60,

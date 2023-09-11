@@ -86,4 +86,12 @@ trait HttpResponse
     public function responseUnauthorized($errors){
         return response()->json(['errors' => $errors], Response::HTTP_UNAUTHORIZED);
     }
+
+    /**
+     * Return statusCode 400
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function responseBadRequest($msg){
+        return response()->json(['errors' => $msg], Response::HTTP_BAD_REQUEST);
+    }
 }

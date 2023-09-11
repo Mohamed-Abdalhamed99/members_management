@@ -5,6 +5,8 @@ use App\Http\Controllers\CentralApp\PlanController;
 use App\Http\Controllers\CentralApp\RoleController;
 use App\Http\Controllers\CentralApp\TenantController;
 use App\Http\Controllers\CentralApp\UserController;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\UniqueValidationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -32,7 +34,7 @@ Route::prefix('/dashboard')->as('dashboard.')->group(function () {
        Route::patch('/reset-password', ResetPasswordController::class)->name('resetPassword.api');
    });
 
-    Route::middleware(['dashboard' , 'auth:sanctum', 'permission'])->group(function () {
+    Route::middleware(['create_permissions','dashboard' , 'auth:sanctum', 'permission'])->group(function () {
         Route::apiResource('roles', RoleController::class);
         Route::get('permissions' , [RoleController::class , 'getPermissions'])->name('permissions.read')->middleware('permission:dashboard.permissions.read');
         Route::apiResource('users', UserController::class);
@@ -51,9 +53,17 @@ Route::prefix('accounts')->namespace('App\Http\Controllers\CentralApp\Auth\Tenan
 });
 
 
-// Route::apiResource('tenants', TenantController::class);
+// unique validations keys
+Route::post('unique-users-validations/{key}/{value}' , [UniqueValidationController::class , 'valdateUniqueUsers']);
+Route::post('unique-tenants-validations/{key}/{value}' , [UniqueValidationController::class , 'valdateUniqueTenants']);
 
 
-Route::middleware('create_permissions')->get('test' , function (){
-    dd('central app');
+Route::get('test' , function (){
+   // dd('hello');
+    $nameSpace = '\\App\Models\\' . 'User';
+    $model = $nameSpace ;
+    $res = $model::get();
+    dd($res);
 });
+
+Route::post('stripe' , [Controller::class , 'stripePay']);

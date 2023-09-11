@@ -26,7 +26,7 @@ class VerifyEmailRequest extends FormRequest
     {
         return [
             'email'     => ['required','email','exists:tokens,email'],
-            'token'     => ['required', 'digits:6', 'exists:tokens,token']
+            'token'     => ['required', 'digits:8', 'exists:tokens,token']
         ];
     }
 }

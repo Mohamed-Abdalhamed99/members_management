@@ -25,9 +25,6 @@ class LectureContentsController extends Controller
 
     use HttpResponse;
 
-
-
-
     public function updateVideoLectureContent(UpdateVideoLectureContentRequest $request, LectureContent $lectureContent)
     {
         // check media type

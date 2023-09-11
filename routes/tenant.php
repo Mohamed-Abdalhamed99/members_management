@@ -19,6 +19,10 @@ use \App\Http\Controllers\Admin\TenantController;
 use App\Http\Controllers\CentralApp\Auth\Dashboard\MobileLoginController;
 use App\Http\Controllers\CentralApp\RoleController;
 use App\Http\Controllers\CentralApp\UserController;
+use App\Http\Controllers\TenantApp\Students\Auth\StudentOptController;
+use App\Http\Controllers\TenantApp\Students\ProfileController;
+use App\Http\Requests\Students\UpdateProfileRequest;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
@@ -36,11 +40,12 @@ use Spatie\Permission\Models\Permission;
 */
 Route::as('lms.')->prefix('v1/api/lms')->middleware([
 
-    'create_permissions', 'api', 'check_language' , 'json.response', 'lms',
+    'api', 'check_language' , 'json.response', 'lms',
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 
 ])->group(function () {
+    // admin auth
     Route::post('send-opt' , [MobileLoginController::class , 'sendOPT'])->name('send-opt');
     Route::post('mobile-login' , [MobileLoginController::class , 'mobileLogin'])->name('mobile-login');
     Route::post('verify-mobile' , [MobileLoginController::class , 'verifyMobile'])->name('verify-mobile');
@@ -52,11 +57,29 @@ Route::as('lms.')->prefix('v1/api/lms')->middleware([
     Route::post('/forget-password', ForgotPasswordController::class)->name('requestPasswordToken.api');
     Route::patch('/reset-password', ResetPasswordController::class)->name('resetPassword.api');
 
-    Route::middleware([ 'auth:sanctum', 'permission'])->group(function () {
+    Route::middleware(['create_permissions' , 'auth:sanctum', 'permission'])->group(function () {
         Route::apiResource('roles', RoleController::class);
         Route::get('permissions' , [RoleController::class , 'getPermissions'])->name('permissions.read')->middleware('permission:dashboard.permissions.read');
         Route::apiResource('users', UserController::class);
         Route::put('change-user-password/{user}' , [UserController::class , 'changePassword'])->name('change-user-password');
     });
+
+
+    // students auth
+    Route::prefix('students')->as('students')->namespace('App\Http\Controllers\TenantApp\Students\Auth')->group(function (){
+        Route::post('send-opt' , [StudentOptController::class , 'sendOPT'])->name('send-opt');
+        Route::post('verify-mobile' ,VerifyMobileController::class)->name('verify-mobile');
+        Route::post('/login', StudentLoginController::class)->name('login.api');
+        Route::delete('/logout', StudentLogoutController::class)->name('logout.api')->middleware('auth:student');
+         Route::post('/register', StudentRegistrationController::class)->name('register.api');
+        Route::post('/verify-email', StudentEmailVerificationController::class)->name('verifyToken.api');
+
+        Route::middleware('auth:student')->get('profile' , [ProfileController::class , 'editProfile']);
+        Route::middleware('auth:student')->post('update-profile' , [ProfileController::class , 'editProfile']);
+        Route::middleware('auth:student')->post('update-avatar' , [ProfileController::class , 'updateAvatar']);
+
+    });
+
+
 
 });

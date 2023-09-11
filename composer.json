@@ -19,6 +19,7 @@
         "spatie/laravel-permission": "^5.9",
         "spatie/laravel-query-builder": "^5.2",
         "stancl/tenancy": "^3.7",
+        "stripe/stripe-php": "^10.19",
         "twilio/sdk": "^7.5"
     },
     "require-dev": {
@@ -39,7 +40,7 @@
         },
         "files": [
             "app/helpers.php"
-        ]
+        ]   
     },
     "autoload-dev": {
         "psr-4": {

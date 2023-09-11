@@ -24,14 +24,14 @@ class UserController extends Controller {
     * @return Renderable
     */
     public function index() {
-        $courses = QueryBuilder::for ( User::class )
+        $users = QueryBuilder::for ( User::class )
         ->defaultSort( '-created_at' )
         ->allowedSorts( [ 'first_name', 'last_name' ] )
         ->allowedFilters( [ 'first_name', 'last_name', 'email', 'mobile' ] )
         ->paginate( \request()->pages ?? 25 )
         ->appends( request()->query() );
 
-        return $this->respond( UserResource::collection( $courses )->response()->getData( true ) );
+        return $this->respond( UserResource::collection( $users )->response()->getData( true ) );
     }
 
     /**

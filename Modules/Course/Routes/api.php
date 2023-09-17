@@ -45,6 +45,7 @@ Route::middleware(['create_permissions','auth:sanctum' , 'dashboard'])->group(fu
         Route::post('lecture-content/update-voice/{lecture_content}' , [\Modules\Course\Http\Controllers\LectureContentsController::class , 'updateVoiceLectureContent'])->name('lecture-content.update-voice');
         Route::post('lecture-content/update-video/{lecture_content}' , [\Modules\Course\Http\Controllers\LectureContentsController::class , 'updateVideoLectureContent'])->name('lecture-content.update-video');
 
+        Route::get('get_complete_rules ' , [\Modules\Course\Http\Controllers\LectureContentsController::class , 'getCompleteRules'])->name('get-complete-lecture-rules');
 });
 
 
@@ -83,7 +84,10 @@ Route::as('lms.')->prefix('lms')->middleware([
         Route::post('lecture-content/update-article/{lecture_content}' , [\Modules\Course\Http\Controllers\LectureContentsController::class , 'updateArticleToLectureContent'])->name('lecture-content.update-article');
         Route::post('lecture-content/update-voice/{lecture_content}' , [\Modules\Course\Http\Controllers\LectureContentsController::class , 'updateVoiceLectureContent'])->name('lecture-content.update-voice');
         Route::post('lecture-content/update-video/{lecture_content}' , [\Modules\Course\Http\Controllers\LectureContentsController::class , 'updateVideoLectureContent'])->name('lecture-content.update-video');
-        // landing page
+
+        Route::get('get_complete_rules ' , [\Modules\Course\Http\Controllers\LectureContentsController::class , 'getCompleteRules'])->name('get-complete-lecture-rules');
+
+
     });
 
 

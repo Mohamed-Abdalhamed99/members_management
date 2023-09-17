@@ -259,4 +259,29 @@ class LectureContentsController extends Controller
         $lectureContent->delete();
         return $this->responseOk('تم حذف المحتوي بنجاح');
     }
+
+    /**
+     * get complete rules of lecture
+     *
+     * @return mix
+     */
+    public function getCompleteRules()
+    {
+        $rules = [
+                [
+                    'name' => 'Complete video',
+                    'value' => Lecture::COMPLETE_VIDEO_PERCENTAGE
+                ],
+                [
+                    'name' => 'Passing quize',
+                    'value' => Lecture::PASSING_QUIZE
+                ],
+                [
+                    'name' => 'Mark as learned',
+                    'value' =>  Lecture::MARK_AS_LEARNED_CHECKBOX
+                ]
+            ];
+
+            return $this->respond($rules);
+    }
 }
